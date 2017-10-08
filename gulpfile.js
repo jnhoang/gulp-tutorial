@@ -4,6 +4,7 @@ var gulp          = require('gulp');
 var browserSync   = require('browser-sync');
 var reload        = browserSync.reload;
 var uglify        = require('gulp-uglify');
+var sass          = require('gulp-sass');
 var rename        = require('gulp-rename');
 var del           = require('del');
 
@@ -20,6 +21,7 @@ gulp.task('scripts', function() {
 });
 
 
+
 /* HTML TASKS */
 gulp.task('html', function() {
   gulp
@@ -27,6 +29,14 @@ gulp.task('html', function() {
   .pipe(reload(reloadObj));
 })
 
+/* STYLE TASKS */
+gulp.task('styles', function() {
+  gulp
+  .src('app/scss/main.scss')
+  .pipe(sass())
+  .pipe(gulp.dest('app/css'))
+  .pipe(reload(reloadObj));
+});
 
 /* BUILD TASKS */
 
@@ -67,28 +77,36 @@ gulp.task('build', ['build:copy', 'build:remove']);
 
 // dev build
 gulp.task('build:serve', function() {
-  browserSync({
+  browserSyncObj = {
     server: {
       baseDir: './build/'
     }
-  });
+  };
+
+  browserSync(browserSyncObj);
 });
 
 // cleaned build
 gulp.task('browser-sync', function() {
-  browserSync({
+  browserSyncObj = {
     server: {
       baseDir: './app/'
     }
-  });
+  };
+
+  browserSync(browserSyncObj);
 });
+
+
 
 /* WATCH TASKS */
 gulp.task('watch', function() {
   gulp.watch('app/js/**/*.js', ['scripts']);
+  gulp.watch('app/**/*.scss', ['styles']);
   gulp.watch('app/**/*.html', ['html']);
 })
 
 
+
 /* DEFAULT TASK*/
-gulp.task('default', ['scripts','html', 'browser-sync', 'watch']);
+gulp.task('default', ['scripts', 'html', 'styles', 'browser-sync', 'watch']);
