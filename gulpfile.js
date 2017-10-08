@@ -64,6 +64,17 @@ gulp.task('build', ['build:copy', 'build:remove']);
 
 
 /* BROWSERSYNC TASKS */
+
+// dev build
+gulp.task('build:serve', function() {
+  browserSync({
+    server: {
+      baseDir: './build/'
+    }
+  });
+});
+
+// cleaned build
 gulp.task('browser-sync', function() {
   browserSync({
     server: {
@@ -71,7 +82,6 @@ gulp.task('browser-sync', function() {
     }
   });
 });
-
 
 /* WATCH TASKS */
 gulp.task('watch', function() {
